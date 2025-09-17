@@ -52,8 +52,10 @@ export class TodoListComponent implements OnInit {
     this.todoService.toggleComplete(todo.id);
   }
 
-  deleteTodo(id: number): void {
+deleteTodo(id: number): void {
+    // 1. Tell the service to delete the item
     this.todoService.deleteTodo(id);
+     this.todos = this.todoService.getTodos();
   }
 
   // --- NEW METHODS FOR ENHANCEMENTS ---
