@@ -1,0 +1,57 @@
+<div class="todo-container">
+  <h2>My Todo List</h2>
+
+  <form (ngSubmit)="addTodo()" class="todo-form">
+    <input
+      type="text"
+      placeholder="What needs to be done?"
+      [(ngModel)]="newTodoTitle"
+      name="newTodoTitle"
+      required
+    />
+    <button type="submit">Add Todo</button>
+  </form>
+
+  <div class="filter-buttons">
+    <button (click)="setFilter('all')" [class.active]="filter === 'all'">All</button>
+    <button (click)="setFilter('active')" [class.active]="filter === 'active'">Active</button>
+    <button (click)="setFilter('completed')" [class.active]="filter === 'completed'">Completed</button>
+  </div>
+
+  <ul class="todo-list">
+    <li *ngFor="let todo of filteredTodos" [class.completed]="todo.completed" [class.editing]="editingTodoId === todo.id">
+      
+      <div *ngIf="editingTodoId !== todo.id" class="todo-item">
+        <div class="todo-item-main">
+          <input
+            type="checkbox"
+            [checked]="todo.completed"
+            (change)="toggleComplete(todo)"
+          />
+          <span class="todo-title" (dblclick)="startEditing(todo)">
+            {{ todo.title | uppercase }}
+          </span>
+        </div>
+        <div class="todo-item-details">
+          <span class="todo-date">
+            Added on: {{ todo.createdAt | date:'short' }}
+          </span>
+          <button (click)="deleteTodo(todo.id)" class="delete-btn">❌</button>
+        </div>
+      </div>
+
+      <div *ngIf="editingTodoId === todo.id" class="edit-form">
+        <input 
+          type="text" 
+          [(ngModel)]="editedTodoTitle" 
+          (keyup.enter)="saveEdit(todo)"
+          (keyup.escape)="cancelEdit()"
+          name="editedTodoTitle"
+          class="edit-input"
+        />
+        <button (click)="saveEdit(todo)" class="save-btn">Save</button>
+        <button (click)="cancelEdit()" class="cancel-btn">Cancel</button>
+      </div>
+    </li>
+  </ul>
+</div>
